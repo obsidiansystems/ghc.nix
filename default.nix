@@ -7,11 +7,12 @@
 let
   sources = import ./nix/sources.nix {};
 in
-{ nixpkgs   ? import (sources.nixpkgs) {}
+{ nixpkgsArgs ? {}
+, nixpkgs   ? import (sources.nixpkgs) nixpkgsArgs
 , bootghc   ? "ghc884"
 , version   ? "9.1"
 , hadrianCabal ? (builtins.getEnv "PWD") + "/hadrian/hadrian.cabal"
-, nixpkgs-unstable ? import (sources.nixpkgs-unstable) {}
+, nixpkgs-unstable ? import (sources.nixpkgs-unstable) nixpkgsArgs
 , useClang  ? false  # use Clang for C compilation
 , withLlvm  ? false
 , withDocs  ? true
