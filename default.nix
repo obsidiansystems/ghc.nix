@@ -38,9 +38,13 @@ let
       else nixpkgs.stdenv;
     noTest = pkg: haskell.lib.dontCheck pkg;
 
-    hspkgs = haskell.packages.${bootghc}.override {
+    hspkgs = haskell.packages.${bootghc}.override ({
       all-cabal-hashes = sources.all-cabal-hashes;
-    };
+    } // lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
+      overrides = self: super: {
+        aeson = noTest super.aeson;
+      };
+    });
 
     ghc    = haskell.compiler.${bootghc};
 
