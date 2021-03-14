@@ -9,7 +9,7 @@ let
 in
 { nixpkgsArgs ? {}
 , nixpkgs   ? import (sources.nixpkgs) nixpkgsArgs
-, bootghc   ? "ghc884"
+, bootghc   ? "ghc8102"
 , version   ? "9.1"
 , hadrianCabal ? (builtins.getEnv "PWD") + "/hadrian/hadrian.cabal"
 , nixpkgs-unstable ? import (sources.nixpkgs-unstable) nixpkgsArgs
@@ -83,14 +83,17 @@ let
             darwin.apple_sdk.frameworks.Foundation
           ])
     );
-    alex =
-      if lib.versionAtLeast version "9.1"
-      then noTest (hspkgs.callHackage "alex" "3.2.6" {})
-      else noTest (haskell.packages.ghc865.callHackage "alex" "3.2.5" {});
+
     happy =
       if lib.versionAtLeast version "9.1"
       then noTest (hspkgs.callHackage "happy" "1.20.0" {})
       else noTest (haskell.packages.ghc865.callHackage "happy" "1.19.12" {});
+
+    alex =
+      if lib.versionAtLeast version "9.1"
+      then noTest (hspkgs.callHackage "alex" "3.2.6" {})
+      else noTest (hspkgs.callHackage "alex" "3.2.5" {});
+
     depsTools = [ happy alex hspkgs.cabal-install ];
 
     hadrianCabalExists = builtins.pathExists hadrianCabal;
